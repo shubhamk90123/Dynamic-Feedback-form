@@ -15,7 +15,9 @@ const { userRoute } = require("./routes/UserRoute");
 // Static files
 app.use(express.static(path.join(rootDir, "public")));
 
-
+//Body Parser
+app.use(express.urlencoded({ extended: true })); 
+app.use(express.json()); 
 
 app.set("view engine", "ejs");
 app.set("views", "views");

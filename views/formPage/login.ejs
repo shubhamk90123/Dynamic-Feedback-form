@@ -5,20 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback Application</title>
-    <link rel="stylesheet" href="/login.css">
+    <link rel="stylesheet" href="/css/formcss/login.css">
 
   </head>
 
   <body>
-    <form action="" class="container">
+    <form action="" method="POST" class="container">
       <div>
         <h1 class="">Login</h1>
         <input type=" email" placeholder="Username" name="email" required>
-        <input type="password" placeholder="Password" name="password" required>
+        <div class="password-field">
+          <input id="loginPassword" type="password" placeholder="Password" name="password" required>
+          <button type="button" class="toggle-password" data-target="loginPassword"
+            aria-label="Show password">Show</button>
+        </div>
         <button>Log In</button>
       </div>
       <p>don't have an account ? <a href="/signup">Sign Up</a></p>
     </form>
+    <script src="/js/formlogic/login.js"></script>
   </body>
 
 </html>

@@ -4,12 +4,12 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/signUp.css">
+    <link rel="stylesheet" href="/css/formcss/signUp.css">
     <title>Document</title>
   </head>
 
   <body>
-    <form action="/login" class="container" method="POSt">
+    <form action="/signup" class="container" method="POSt">
       <div>
         <h1 class="">Register</h1>
         <input type="text" placeholder="Username" name="username" required>
@@ -19,12 +19,21 @@
           <option value="admin">Admin</option>
           <option value="instructor">User</option>
         </select>
-        <input type="password" placeholder="Password" name="password" required>
-        <input type="password" placeholder=" Conform Password" required>
+        <div class="password-field">
+          <input id="signUpPassword" type="password" placeholder="Password" name="password" required>
+          <button type="button" class="toggle-password" data-target="signUpPassword"
+            aria-label="Show password">Show</button>
+        </div>
+        <div class="password-field">
+          <input id="confirmPassword" name="confirmPassword" type="password" placeholder=" Conform Password" required>
+          <button type="button" class="toggle-password" data-target="confirmPassword"
+            aria-label="Show password">Show</button>
+        </div>
         <button type="submit">Sign Up</button>
       </div>
       <p>Already have an account <a href="/login">Login</a></p>
     </form>
+    <script src="/js/formlogic/signUp.js"></script>
   </body>
 
 </html>

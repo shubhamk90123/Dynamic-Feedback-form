@@ -7,6 +7,8 @@ exports.getLogin = (req, res) => {
 };
 
 exports.postLogin = (req, res) => {
+  const { email, password } = req.body;
+  console.log("Login body:", { email, password });
   res.render("./formPage/login");
 };
 
@@ -15,7 +17,15 @@ exports.getSignUp = (req, res) => {
 };
 
 exports.postSignUp = (req, res) => {
-  res.redirect("./formPage/login");
+  const { username, email, role, password, confirmPassword } = req.body;
+  console.log("Signup body:", {
+    username,
+    email,
+    role,
+    password,
+    confirmPassword,
+  });
+  res.redirect("/login");
 };
 
 exports.getFeedback = (req, res) => {
