@@ -75,13 +75,14 @@ td:nth-child(3) {
   margin-right: 0;
 }
 
-.logout-link {
+.link {
   display: block;
   margin-top: 10px;
   text-align: center;
   font-size: 14px;
   color: #2563eb;
   text-decoration: none;
+  
 }
 
 @media (max-width: 820px) {

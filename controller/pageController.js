@@ -1,3 +1,8 @@
+const fs = require("fs/promises");
+const path = require("path");
+
+let userData = [];
+
 exports.rootPage = (req, res) => {
   res.render("./formPage/rootPage");
 };
@@ -13,11 +18,27 @@ exports.postLogin = (req, res) => {
 };
 
 exports.getSignUp = (req, res) => {
-  res.render("./formPage/SignUp");
+  res.render("./formPage/signUp");
 };
 
 exports.postSignUp = (req, res) => {
   const { username, email, role, password, confirmPassword } = req.body;
+
+  if (!username || !email || !password || !role || !confirmPassword) {
+    return res.status(400).render("signup");
+  }
+
+  if (password !== confirmPassword) {
+    return res.status(400).render("signup");
+  }
+
+  userData.push({
+    username: username.trim(),
+    email: email.toLowerCase().trim(),
+    role: role.trim(),
+    password: password.trim(),
+  });
+
   console.log("Signup body:", {
     username,
     email,
@@ -25,13 +46,5 @@ exports.postSignUp = (req, res) => {
     password,
     confirmPassword,
   });
-  res.redirect("/login");
-};
-
-exports.getFeedback = (req, res) => {
-  res.render("./formPage/feedback");
-};
-
-exports.postFeedback = (req, res) => {
-  res.render("./formPage/feedback");
+  return res.redirect("/login");
 };

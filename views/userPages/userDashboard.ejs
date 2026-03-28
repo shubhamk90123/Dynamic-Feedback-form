@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Feedback Dashboard</title>
-    <link rel="stylesheet" href="/css/usercss/admindashboard.css">
+    <link rel="stylesheet" href="/css/usercss/userDashboard.css">
   </head>
 
   <body>
-    <main class="dashboard-card">
+    <form class="dashboard-card" method="POST">
       <h1>User Feedback Dashboard</h1>
 
       <table>
@@ -44,9 +44,9 @@
           </tr>
         </tbody>
       </table>
-
-      <a href="/login" class="logout-link">Log Out</a>
-    </main>
+      <a href="/user/userFeedback" class="link">Add Feedback</a>
+      <a href="/login" class="link">Log Out</a>
+    </form>
   </body>
 
 </html>
