@@ -1,0 +1,83 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f6f8;
+  font-family: Arial, sans-serif;
+}
+
+.feedback-card {
+  width: 420px;
+  padding: 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+h1 {
+  margin: 0 0 16px;
+  text-align: center;
+  font-size: 24px;
+}
+
+.top-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.btn {
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background: #2563eb;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.btn-add,
+.btn-edit {
+  flex: 1;
+}
+
+label {
+  display: block;
+  font-size: 16px;
+  margin: 8px 0;
+}
+
+textarea {
+  width: 100%;
+  min-height: 130px;
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  resize: vertical;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+textarea::placeholder {
+  color: #94a3b8;
+}
+
+.btn-submit {
+  width: 100%;
+  margin: 0;
+}
+
+button:active{
+  scale: 0.95;
+}
