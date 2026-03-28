@@ -25,11 +25,11 @@ exports.postSignUp = (req, res) => {
   const { username, email, role, password, confirmPassword } = req.body;
 
   if (!username || !email || !password || !role || !confirmPassword) {
-    return res.status(400).render("signup");
+    return res.status(400).render("./formPage/signUp");
   }
 
   if (password !== confirmPassword) {
-    return res.status(400).render("signup");
+    return res.status(400).render("./formPage/signUp");
   }
 
   userData.push({
