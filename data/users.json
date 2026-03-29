@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "username": "sk90123",
+    "email": "abc@gmail.com",
+    "role": "admin",
+    "password": "123"
+  },
+  {
+    "username": "sk",
+    "email": "sk@gmail.com",
+    "role": "user",
+    "password": "123"
+  }
+]
