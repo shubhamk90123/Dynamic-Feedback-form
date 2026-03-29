@@ -35,7 +35,7 @@
                   <%= new Date().toLocaleDateString() %>
                 </td>
                 <td class="action-cell">
-                  <button type="button">View</button>
+
                   <button type="button">Edit</button>
                   <button type="button">Delete</button>
                 </td>
@@ -48,8 +48,11 @@
                   <% } %>
         </tbody>
       </table>
-      <a href="/user/userFeedback" class="link">Add Feedback</a>
-      <a href="/login" class="link">Log Out</a>
+      <div>
+        <a href="/user/userFeedback" class="link">Add Feedback</a>
+        <a href="/login" class="link">Log Out</a>
+      </div>
+
     </form>
   </body>
 

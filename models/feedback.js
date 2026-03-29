@@ -4,8 +4,8 @@ const path = require("path");
 
 //Local modules
 const rootDir = require("../utils/path");
+const { fetchAll } = require("./user");
 
-let feedbackData = [];
 
 module.exports = class Feedback {
   constructor(feedback) {
@@ -13,10 +13,12 @@ module.exports = class Feedback {
   }
 
   save() {
-    feedbackData.push(this);
-    const feedbackFilePath = path.join(rootDir, "data", "feedback.json");
-    fs.writeFile(feedbackFilePath, JSON.stringify(feedbackData), (err) => {
-      console.log(err);
+    Feedback.fetchAll((feedbackData) => {
+      feedbackData.push(this);
+      const feedbackFilePath = path.join(rootDir, "data", "feedback.json");
+      fs.writeFile(feedbackFilePath, JSON.stringify(feedbackData), (err) => {
+        console.log(err);
+      }); 
     });
   }
 

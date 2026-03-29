@@ -1,11 +1,11 @@
 const Feedback = require("../models/feedback");
 
 exports.adminDashboard = (req, res) => {
- Feedback.fetchAll((feedbackData) => {
-   res.render("./adminPages/adminDashboard", {
-     feedbackData: feedbackData,
-   });
- });
+  Feedback.fetchAll((feedbackData) => {
+    res.render("./adminPages/adminDashboard", {
+      feedbackData: feedbackData,
+    });
+  });
 };
 
 exports.getAdminFeedback = (req, res) => {
@@ -15,7 +15,7 @@ exports.getAdminFeedback = (req, res) => {
   });
 };
 
-exports.postAdminFeedback = (req, res) => { 
+exports.postAdminFeedback = (req, res) => {
   const { feedback } = req.body;
   console.log("Feedback you entered", { feedback });
 
