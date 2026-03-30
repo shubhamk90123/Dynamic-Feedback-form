@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Feedback</title>
+  <link rel="stylesheet" href="/css/usercss/userFeedback.css" />
+</head>
+<body>
+  <form class="feedback-card" action="/feedback/edit/<%= feedbackItem.id %>" method="POST">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <h1>Edit Feedback</h1>
+
+    <% if (errors && errors.length) { %>
+      <div class="error-box">
+        <% errors.forEach(function(err) { %><p><%= err %></p><% }) %>
+      </div>
+    <% } %>
+
+    <label for="feedbackText">Update Feedback</label>
+    <textarea id="feedbackText" name="feedback" required><%= feedbackItem.feedback %></textarea>
+
+    <button type="submit" class="btn btn-submit">Update</button>
+    <a href="/dashboard" class="link">Back to Dashboard</a>
+  </form>
+</body>
+</html>

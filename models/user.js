@@ -5,9 +5,6 @@ const path = require("path");
 //Local modules
 const rootDir = require("../utils/path");
 
-//fake database for users
-let userData = [];
-
 module.exports = class User {
   constructor(username, email, role, password) {
     this.username = username;
@@ -17,14 +14,49 @@ module.exports = class User {
   }
 
   save() {
-    userData.push(this);
     const userFilePath = path.join(rootDir, "data", "users.json");
-    fs.writeFile(userFilePath, JSON.stringify(userData), (err) => {
-      console.log(err);
+    User.fetchAll((users) => {
+      users.push(this);
+      fs.writeFile(userFilePath, JSON.stringify(users), (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
     });
   }
 
-  static fetchAll() {
-    return userData;
+  static fetchAll(callback) {
+    const userFilePath = path.join(rootDir, "data", "users.json");
+    fs.readFile(userFilePath, (err, data) => {
+      if (err) {
+        callback([]);
+        return;
+      }
+
+      try {
+        callback(JSON.parse(data));
+      } catch {
+        callback([]);
+      }
+    });
+  }
+
+  static updatePasswordByEmail(email, newPassword, callback) {
+    const userFilePath = path.join(rootDir, "data", "users.json");
+    User.fetchAll((users) => {
+      const updatedUsers = users.map((user) =>
+        user.email === email ? { ...user, password: newPassword } : user,
+      );
+
+      fs.writeFile(userFilePath, JSON.stringify(updatedUsers), (err) => {
+        if (err) {
+          console.error(err);
+        }
+
+        if (callback) {
+          callback();
+        }
+      });
+    });
   }
 };

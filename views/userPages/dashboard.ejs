@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Feedback Dashboard</title>
+    <link rel="stylesheet" href="/css/usercss/userDashboard.css">
+  </head>
+
+  <body>
+    <div class="dashboard-card">
+      <h1>
+        <%= dashboardTitle %>
+      </h1>
+      <p>
+        <%= loggedInText %>
+      </p>
+
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Feedback</th>
+            <th>Submitted By</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (feedbackData && feedbackData.length) { %>
+            <% feedbackData.forEach(function(item, index) { %>
+              <tr>
+                <td>
+                  <%= index + 1 %>
+                </td>
+                <td>
+                  <%= item.feedback %>
+                </td>
+                <td>
+                  <%= item.submittedBy?.username || "Unknown" %>
+                    (<%= item.submittedBy?.role || "unknown" %>)
+                </td>
+                <td>
+                  <%= item.createdAt ? new Date(item.createdAt).toLocaleDateString() : new Date().toLocaleDateString() %>
+                </td>
+                <td class="action-cell">
+                  <% if (item.canManage) { %>
+                    <form action="/feedback/edit/<%= item.id %>" method="GET" style="display:inline;">
+                      <button type="submit">Edit</button>
+                    </form>
+                    <form action="/feedback/delete/<%= item.id %>" method="POST" style="display:inline;">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                      <button type="submit" onclick="return confirm('Delete this feedback?')">Delete</button>
+                    </form>
+                  <% } else { %>
+                    <span>No access</span>
+                  <% } %>
+                </td>
+              </tr>
+              <% }) %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="5">No feedback submitted yet.</td>
+                  </tr>
+                  <% } %>
+        </tbody>
+      </table>
+      <div>
+        <a href="/addFeedback" class="link">Add Feedback</a>
+        <form action="/logout" method="POST" style="display:inline;">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <button type="submit" class="link" style="background:none;border:none;padding:0;cursor:pointer;">Log Out</button>
+        </form>
+      </div>
+
+    </div>
+  </body>
+
+</html>

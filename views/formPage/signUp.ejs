@@ -9,30 +9,41 @@
   </head>
 
   <body>
-    <form action="/signup" class="container" method="POSt">
-      <div>
-        <h1 class="">Register</h1>
-        <input type="text" placeholder="Username" name="username" required>
-        <input type=" email" placeholder="Email" name="email" required>
-        <select name="role" required>
-          <option value="">Select Role</option>
-          <option value="admin">Admin</option>
-          <option value="user">User</option>
-        </select>
-        <div class="password-field">
-          <input id="signUpPassword" type="password" placeholder="Password" name="password" required>
-          <button type="button" class="toggle-password" data-target="signUpPassword"
-            aria-label="Show password">Show</button>
+  <form action="/signup" class="container" method="POST">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div>
+      <h1>Register</h1>
+  
+      <% if (errors && errors.length) { %>
+        <div class="error-box">
+          <% errors.forEach(function(err) { %>
+            <p>
+              <%= err %>
+            </p>
+            <% }) %>
         </div>
-        <div class="password-field">
-          <input id="confirmPassword" name="confirmPassword" type="password" placeholder=" Conform Password" required>
-          <button type="button" class="toggle-password" data-target="confirmPassword"
-            aria-label="Show password">Show</button>
-        </div>
-        <button type="submit">Sign Up</button>
-      </div>
-      <p>Already have an account <a href="/login">Login</a></p>
-    </form>
+        <% } %>
+  
+          <input type="text" placeholder="Username" name="username" value="<%= oldInput?.username || '' %>" required>
+          <input type="email" placeholder="Email" name="email" value="<%= oldInput?.email || '' %>" required>
+          <select name="role" required>
+            <option value="user" selected>User</option>
+          </select>
+          <div class="password-field">
+            <input id="signUpPassword" type="password" placeholder="Password" name="password" required>
+            <button type="button" class="toggle-password" data-target="signUpPassword"
+              aria-label="Show password">Show</button>
+          </div>
+          <div class="password-field">
+            <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" required>
+            <button type="button" class="toggle-password" data-target="confirmPassword"
+              aria-label="Show password">Show</button>
+          </div>
+          <button type="submit">Sign Up</button>
+    </div>
+    <p>Already have an account <a href="/login">Login</a></p>
+  </form>
+
     <script src="/js/formlogic/signUp.js"></script>
   </body>
 
