@@ -8,14 +8,22 @@ const canManageFeedback = (user, item) => {
 
 exports.getUserDashboard = (req, res) => {
   const loggedInUser = req.session.user;
+  const isAdmin = loggedInUser.role === "admin";
   const dashboardTitle =
-    loggedInUser.role === "admin"
+    isAdmin
       ? "Admin Feedback Dashboard"
       : "User Feedback Dashboard";
   const loggedInText = `${loggedInUser.username} logged in (${loggedInUser.role})`;
 
   Feedback.fetchAll((feedbackData) => {
-    const feedbackWithPermission = feedbackData.map((item) => ({
+    const visibleFeedback = isAdmin
+      ? feedbackData
+      : feedbackData.filter(
+          (item) =>
+            item.submittedBy && item.submittedBy.email === loggedInUser.email,
+        );
+
+    const feedbackWithPermission = visibleFeedback.map((item) => ({
       ...item,
       canManage: canManageFeedback(loggedInUser, item),
     }));

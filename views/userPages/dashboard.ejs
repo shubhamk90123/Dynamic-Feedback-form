@@ -4,8 +4,8 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Feedback Dashboard</title>
-    <link rel="stylesheet" href="/css/usercss/userDashboard.css">
+    <title><%= dashboardTitle %></title>
+    <link rel="stylesheet" href="/css/usercss/dashboard.css">
   </head>
 
   <body>
@@ -16,8 +16,6 @@
       <p>
         <%= loggedInText %>
       </p>
-
-
       <table>
         <thead>
           <tr>
@@ -71,7 +69,7 @@
         <a href="/addFeedback" class="link">Add Feedback</a>
         <form action="/logout" method="POST" style="display:inline;">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-          <button type="submit" class="link" style="background:none;border:none;padding:0;cursor:pointer;">Log Out</button>
+          <button type="submit" class="link link-logout">Log Out</button>
         </form>
       </div>
 

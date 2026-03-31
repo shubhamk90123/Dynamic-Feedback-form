@@ -66,8 +66,6 @@ exports.postSignUp = (req, res) => {
   if (!username) errors.push("Username is required.");
   if (!isEmail(email)) errors.push("Enter a valid email.");
   if (!["admin", "user"].includes(role)) errors.push("Choose a valid role.");
-  if (role === "admin")
-    errors.push("Admin account creation is restricted.");
   if (password.length < 6)
     errors.push("Password must be at least 6 characters.");
   if (password !== confirmPassword) errors.push("Passwords do not match.");
@@ -89,7 +87,7 @@ exports.postSignUp = (req, res) => {
     }
 
     const passwordHash = hashPassword(password);
-    const newUser = new User(username, email, "user", passwordHash);
+    const newUser = new User(username, email, role, passwordHash);
     newUser.save();
 
     return res.redirect("/login");
