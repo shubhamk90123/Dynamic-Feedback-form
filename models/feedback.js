@@ -38,7 +38,7 @@ module.exports = class Feedback {
       writeFeedback(feedbackData, callback);
     });
   }
-
+  
   static fetchAll(callback) {
     readFeedback((feedbackData) => {
       callback(
