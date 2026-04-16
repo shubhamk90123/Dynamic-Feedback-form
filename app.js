@@ -8,6 +8,8 @@ const helmet = require("helmet");
 const { attachCsrfToken } = require("./middleware/csrf");
 require("dotenv").config();
 
+app.set('trust proxy', 1);
+
 //Local modules
 const { pageRoute } = require("./routes/pageRoutes");
 const { authRoute } = require("./routes/authRoute");
