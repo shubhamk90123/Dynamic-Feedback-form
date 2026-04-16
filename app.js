@@ -6,9 +6,7 @@ const express = require("express");
 const app = express();
 const session = require("express-session");
 const { attachCsrfToken } = require("./middleware/csrf");
-
-
-const rootDir = require("./utils/path");
+require("dotenv").config();
 
 //Local modules
 const { pageRoute } = require("./routes/pageRoutes");
@@ -16,14 +14,14 @@ const { authRoute } = require("./routes/authRoute");
 const { feedbackRoute } = require("./routes/feedbackRoute");
 
 // Static files
-app.use(express.static(path.join(rootDir, "public")));
+app.use(express.static(path.join(__dirname, "public")));
 
 //Body Parser
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.set("view engine", "ejs");
-app.set("views", path.join(rootDir, "views"));
+app.set("views", path.join(__dirname, "views"));
 
 app.use(
   session({
@@ -33,7 +31,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "strict",
       secure: process.env.NODE_ENV === "production",
       maxAge: 1000 * 60 * 60 * 8, 
     },
@@ -51,7 +49,12 @@ app.use((req, res, next) => {
   res.status(404).render("404");
 });
 
+const connectDB = require("./config/db");
 const PORT = process.env.PORT || 3005;
-app.listen(PORT, () => {
-  console.log(`App is listening on http://localhost:${PORT}`);
+
+// Connect to database and start server
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`App is listening on http://localhost:${PORT}`);
+  });
 });

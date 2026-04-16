@@ -9,31 +9,40 @@ const canManageFeedback = (user, item) => {
 exports.getUserDashboard = (req, res) => {
   const loggedInUser = req.session.user;
   const isAdmin = loggedInUser.role === "admin";
-  const dashboardTitle =
-    isAdmin
-      ? "Admin Feedback Dashboard"
-      : "User Feedback Dashboard";
+  const dashboardTitle = isAdmin
+    ? "Admin Feedback Dashboard"
+    : "User Feedback Dashboard";
   const loggedInText = `${loggedInUser.username} logged in (${loggedInUser.role})`;
 
-  Feedback.fetchAll((feedbackData) => {
-    const visibleFeedback = isAdmin
-      ? feedbackData
-      : feedbackData.filter(
-          (item) =>
-            item.submittedBy && item.submittedBy.email === loggedInUser.email,
-        );
+  Feedback.find()
+    .then((feedbackData) => {
+      const visibleFeedback = isAdmin
+        ? feedbackData
+        : feedbackData.filter(
+            (item) =>
+              item.submittedBy && item.submittedBy.email === loggedInUser.email,
+          );
 
-    const feedbackWithPermission = visibleFeedback.map((item) => ({
-      ...item,
-      canManage: canManageFeedback(loggedInUser, item),
-    }));
+      const feedbackWithPermission = visibleFeedback.map((item) => {
+        const itemObj = item.toObject
+          ? item.toObject({ virtuals: true })
+          : item;
+        return {
+          ...itemObj,
+          canManage: canManageFeedback(loggedInUser, itemObj),
+        };
+      });
 
-    res.render("./userPages/dashboard", {
-      feedbackData: feedbackWithPermission,
-      dashboardTitle,
-      loggedInText,
+      res.render("./userPages/dashboard", {
+        feedbackData: feedbackWithPermission,
+        dashboardTitle,
+        loggedInText,
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
     });
-  });
 };
 
 exports.getAddFeedbackPage = (req, res) => {
@@ -60,52 +69,78 @@ exports.postAddFeedbackPage = (req, res) => {
     },
   });
 
-  newFeedback.save(() => res.redirect("/dashboard"));
+  newFeedback
+    .save()
+    .then(() => res.redirect("/dashboard"))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+    });
 };
 
 exports.getEditFeedbackPage = (req, res) => {
   const feedbackId = req.params.id;
 
-  Feedback.findById(feedbackId, (item) => {
-    if (!item) return res.redirect("/dashboard");
-    if (!canManageFeedback(req.session.user, item))
-      return res.status(403).render("404");
+  Feedback.findById(feedbackId)
+    .then((item) => {
+      if (!item) return res.redirect("/dashboard");
+      if (!canManageFeedback(req.session.user, item))
+        return res.status(403).render("404");
 
-    return res.render("./userPages/editFeedback", {
-      errors: [],
-      feedbackItem: item,
+      return res.render("./userPages/editFeedback", {
+        errors: [],
+        feedbackItem: item.toObject ? item.toObject({ virtuals: true }) : item,
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.redirect("/dashboard");
     });
-  });
 };
 
 exports.postEditFeedbackPage = (req, res) => {
   const feedbackId = req.params.id;
   const updatedText = (req.body.feedback || "").trim();
 
-  Feedback.findById(feedbackId, (item) => {
-    if (!item) return res.redirect("/dashboard");
-    if (!canManageFeedback(req.session.user, item))
-      return res.status(403).render("404");
+  Feedback.findById(feedbackId)
+    .then((item) => {
+      if (!item) return res.redirect("/dashboard");
+      if (!canManageFeedback(req.session.user, item))
+        return res.status(403).render("404");
 
-    if (updatedText.length < 3) {
-      return res.status(400).render("./userPages/editFeedback", {
-        errors: ["Feedback must be at least 3 characters."],
-        feedbackItem: item,
-      });
-    }
+      if (updatedText.length < 3) {
+        return res.status(400).render("./userPages/editFeedback", {
+          errors: ["Feedback must be at least 3 characters."],
+          feedbackItem: item.toObject
+            ? item.toObject({ virtuals: true })
+            : item,
+        });
+      }
 
-    Feedback.updateById(feedbackId, updatedText, () => res.redirect("/dashboard"));
-  });
+      item.feedback = updatedText;
+      return item.save().then(() => res.redirect("/dashboard"));
+    })
+    .catch((err) => {
+      console.error(err);
+      res.redirect("/dashboard");
+    });
 };
 
 exports.postDeleteFeedbackPage = (req, res) => {
   const feedbackId = req.params.id;
 
-  Feedback.findById(feedbackId, (item) => {
-    if (!item) return res.redirect("/dashboard");
-    if (!canManageFeedback(req.session.user, item))
-      return res.status(403).render("404");
+  Feedback.findById(feedbackId)
+    .then((item) => {
+      if (!item) return res.redirect("/dashboard");
+      if (!canManageFeedback(req.session.user, item))
+        return res.status(403).render("404");
 
-    Feedback.deleteById(feedbackId, () => res.redirect("/dashboard"));
-  });
+      return Feedback.findByIdAndDelete(feedbackId).then(() =>
+        res.redirect("/dashboard"),
+      );
+    })
+    .catch((err) => {
+      console.error(err);
+      res.redirect("/dashboard");
+    });
 };

@@ -1,14 +1,14 @@
-const User = require("../models/user");
+const Users = require("../models/user");
 const { hashPassword, verifyPassword, needsRehash } = require("../utils/password");
 
 const isEmail = (v = "") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
 exports.postLogin = (req, res) => {
-  const email = (req.body.email || "").trim().toLowerCase();
-  const password = (req.body.password || "").trim();
+  const email = (req.body.email || "").toLowerCase();
+  const password = (req.body.password || "");
 
   const errors = [];
-  if (!isEmail(email)) errors.push("Enter a valid email.");
+  if (!email) errors.push("Email is required.");  
   if (!password) errors.push("Password is required.");
 
   if (errors.length) {
@@ -17,10 +17,8 @@ exports.postLogin = (req, res) => {
       oldInput: { email },
     });
   }
-
-  User.fetchAll((users) => {
-    const matchedUser = users.find((user) => user.email === email);
-
+   
+  Users.findOne({ email }).then((matchedUser) => {
     if (!matchedUser) {
       return res.status(401).render("./formPage/login", {
         errors: ["Invalid email or password."],
@@ -48,10 +46,15 @@ exports.postLogin = (req, res) => {
 
     if (needsRehash(matchedUser.password)) {
       const upgradedPassword = hashPassword(password);
-      return User.updatePasswordByEmail(email, upgradedPassword, completeLogin);
+      matchedUser.password = upgradedPassword;
+      return matchedUser.save().then(() => completeLogin());
     }
 
     return completeLogin();
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
   });
 };
 
@@ -77,21 +80,29 @@ exports.postSignUp = (req, res) => {
     });
   }
 
-  User.fetchAll((users) => {
-    const userExists = users.some((user) => user.email === email);
-    if (userExists) {
-      return res.status(409).render("./formPage/signUp", {
-        errors: ["Email is already registered."],
-        oldInput: { username, email, role },
+  Users.findOne({ email })
+    .then((existingUser) => {
+      if (existingUser) {
+        return res.status(409).render("./formPage/signUp", {
+          errors: ["Email is already registered."],
+          oldInput: { username, email, role },
+        });
+      }
+
+      const passwordHash = hashPassword(password);
+      const newUser = new Users({
+        username,
+        email,
+        role,
+        password: passwordHash,
       });
-    }
 
-    const passwordHash = hashPassword(password);
-    const newUser = new User(username, email, role, passwordHash);
-    newUser.save();
-
-    return res.redirect("/login");
-  });
+      return newUser.save().then(() => res.redirect("/login"));
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+    });
 };
 
 exports.postLogout = (req, res) => {
