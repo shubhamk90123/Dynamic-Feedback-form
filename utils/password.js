@@ -9,7 +9,7 @@ exports.hashPassword = (plainPassword) => {
 };
 
 exports.verifyPassword = (plainPassword, storedPassword) => {
-  if (!storedPassword) {
+  if (!storedPassword) {   
     return false;
   }
 
