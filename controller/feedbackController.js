@@ -50,7 +50,7 @@ exports.getAddFeedbackPage = (req, res) => {
 };
 
 exports.postAddFeedbackPage = (req, res) => {
-  const feedback = (req.body.feedback || "").trim();
+  const feedback = String(req.body.feedback || "").trim();
   const user = req.session.user;
 
   if (feedback.length < 3) {
@@ -100,7 +100,7 @@ exports.getEditFeedbackPage = (req, res) => {
 
 exports.postEditFeedbackPage = (req, res) => {
   const feedbackId = req.params.id;
-  const updatedText = (req.body.feedback || "").trim();
+  const updatedText = String(req.body.feedback || "").trim();
 
   Feedback.findById(feedbackId)
     .then((item) => {

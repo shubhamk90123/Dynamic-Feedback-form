@@ -4,8 +4,8 @@ const { hashPassword, verifyPassword, needsRehash } = require("../utils/password
 const isEmail = (v = "") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
 exports.postLogin = (req, res) => {
-  const email = (req.body.email || "").toLowerCase();
-  const password = (req.body.password || "");
+  const email = String(req.body.email || "").toLowerCase();
+  const password = String(req.body.password || "");
 
   const errors = [];
   if (!email) errors.push("Email is required.");  
@@ -59,11 +59,11 @@ exports.postLogin = (req, res) => {
 };
 
 exports.postSignUp = (req, res) => {
-  const username = (req.body.username || "").trim();
-  const email = (req.body.email || "").trim().toLowerCase();
-  const role = (req.body.role || "").trim();
-  const password = (req.body.password || "").trim();
-  const confirmPassword = (req.body.confirmPassword || "").trim();
+  const username = String(req.body.username || "").trim();
+  const email = String(req.body.email || "").trim().toLowerCase();
+  const role = String(req.body.role || "").trim();
+  const password = String(req.body.password || "").trim();
+  const confirmPassword = String(req.body.confirmPassword || "").trim();
 
   const errors = [];
   if (!username) errors.push("Username is required.");
