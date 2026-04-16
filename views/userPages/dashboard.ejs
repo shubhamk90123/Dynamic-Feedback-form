@@ -4,76 +4,145 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= dashboardTitle %></title>
-    <link rel="stylesheet" href="/css/usercss/dashboard.css">
+    <title>
+      <%= dashboardTitle %>
+    </title>
+    <link rel="stylesheet" href="/output.css">
   </head>
 
-  <body>
-    <div class="dashboard-card">
-      <h1>
-        <%= dashboardTitle %>
-      </h1>
-      <p>
-        <%= loggedInText %>
-      </p>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Feedback</th>
-            <th>Submitted By</th>
-            <th>Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% if (feedbackData && feedbackData.length) { %>
-            <% feedbackData.forEach(function(item, index) { %>
-              <tr>
-                <td>
-                  <%= index + 1 %>
-                </td>
-                <td>
-                  <%= item.feedback %>
-                </td>
-                <td>
-                  <%= item.submittedBy?.username || "Unknown" %>
-                    (<%= item.submittedBy?.role || "unknown" %>)
-                </td>
-                <td>
-                  <%= item.createdAt ? new Date(item.createdAt).toLocaleDateString() : new Date().toLocaleDateString() %>
-                </td>
-                <td class="action-cell">
-                  <% if (item.canManage) { %>
-                    <form action="/feedback/edit/<%= item.id %>" method="GET" style="display:inline;">
-                      <button type="submit">Edit</button>
-                    </form>
-                    <form action="/feedback/delete/<%= item.id %>" method="POST" style="display:inline;">
-                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                      <button type="submit" onclick="return confirm('Delete this feedback?')">Delete</button>
-                    </form>
-                  <% } else { %>
-                    <span>No access</span>
-                  <% } %>
-                </td>
-              </tr>
-              <% }) %>
-                <% } else { %>
-                  <tr>
-                    <td colspan="5">No feedback submitted yet.</td>
-                  </tr>
-                  <% } %>
-        </tbody>
-      </table>
-      <div>
-        <a href="/addFeedback" class="link">Add Feedback</a>
-        <form action="/logout" method="POST" style="display:inline;">
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-          <button type="submit" class="link link-logout">Log Out</button>
-        </form>
+  <body class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 font-sans text-slate-800">
+
+    <main class="max-w-5xl mx-auto px-4 py-10">
+
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">
+            <%= dashboardTitle %>
+          </h1>
+          <p class="text-sm text-slate-500 mt-1">
+            <%= loggedInText %>
+          </p>
+        </div>
+
+        <div class="flex gap-3 w-full sm:w-auto">
+          <a href="/addFeedback" class="flex-1 sm:flex-none text-center px-4 py-2 rounded-lg font-semibold text-white
+          bg-gradient-to-r from-blue-600 to-indigo-600
+          hover:from-blue-700 hover:to-indigo-700
+          transition shadow-md hover:shadow-lg">
+            + Add
+          </a>
+
+          <form action="/logout" method="POST" class="flex-1 sm:flex-none">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button type="submit" class="w-full px-4 py-2 rounded-lg font-semibold
+            bg-white border border-slate-300
+            hover:bg-slate-100 transition">
+              Logout
+            </button>
+          </form>
+        </div>
       </div>
 
-    </div>
+      <!-- Card -->
+      <div class="bg-white/80 backdrop-blur-md border border-slate-200 rounded-xl shadow-lg overflow-hidden">
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+
+            <thead class="bg-slate-100 text-slate-600 uppercase text-xs tracking-wider">
+              <tr>
+                <th class="px-4 py-3 text-left">#</th>
+                <th class="px-4 py-3 text-left">Feedback</th>
+                <th class="px-4 py-3 text-left">User</th>
+                <th class="px-4 py-3 text-left">Date</th>
+                <th class="px-4 py-3 text-left">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y divide-slate-200">
+
+              <% if (feedbackData && feedbackData.length) { %>
+                <% feedbackData.forEach(function(item, index) { %>
+
+                  <tr class="hover:bg-slate-50 transition">
+
+                    <!-- ID -->
+                    <td class="px-4 py-3 font-medium text-slate-700">
+                      <%= index + 1 %>
+                    </td>
+
+                    <!-- Feedback -->
+                    <td class="px-4 py-3 max-w-[400px]">
+                      <p class="line-clamp-2">
+                        <%= item.feedback %>
+                      </p>
+                    </td>
+
+                    <!-- User -->
+                    <td class="px-4 py-3">
+                      <div class="font-medium">
+                        <%= item.submittedBy?.username || "Unknown" %>
+                      </div>
+                      <div class="text-xs text-slate-500">
+                        <%= item.submittedBy?.role || "unknown" %>
+                      </div>
+                    </td>
+
+                    <!-- Date -->
+                    <td class="px-4 py-3 text-slate-500">
+                      <%= item.createdAt ? new Date(item.createdAt).toLocaleDateString() : new
+                        Date().toLocaleDateString() %>
+                    </td>
+
+                    <!-- Actions -->
+                    <td class="px-4 py-3">
+                      <% if (item.canManage) { %>
+                        <div class="flex gap-2 flex-wrap">
+
+                          <form action="/feedback/edit/<%= item.id %>" method="GET">
+                            <button class="px-3 py-1 text-xs font-semibold rounded-md
+                            bg-blue-600 text-white hover:bg-blue-700 transition">
+                              Edit
+                            </button>
+                          </form>
+
+                          <form action="/feedback/delete/<%= item.id %>" method="POST">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button onclick="return confirm('Delete this feedback?')" class="px-3 py-1 text-xs font-semibold rounded-md
+                            bg-red-500 text-white hover:bg-red-600 transition">
+                              Delete
+                            </button>
+                          </form>
+
+                        </div>
+                        <% } else { %>
+                          <span class="text-slate-400 text-xs">No access</span>
+                          <% } %>
+                    </td>
+
+                  </tr>
+
+                  <% }) %>
+                    <% } else { %>
+
+                      <tr>
+                        <td colspan="5" class="text-center py-6 text-slate-500">
+                          No feedback submitted yet.
+                        </td>
+                      </tr>
+
+                      <% } %>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </main>
+
   </body>
 
 </html>

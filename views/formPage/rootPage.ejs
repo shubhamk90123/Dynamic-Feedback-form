@@ -2,21 +2,72 @@
 <html lang="en">
 
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Feedback Application</title>
-    <link rel="stylesheet" href="/css/formcss/root.css">
+    <link rel="stylesheet" href="/output.css">
   </head>
 
-  <body>
-    <main class="hero">
-      <section class="hero-card">
-        <h1 class="eyebrow">Feedback Workspace</h1>
-        <h1>Build Better Experiences With Meaningful Feedback</h1>
-        <p class="subtitle">Collect, review, and act on user feedback in one clean dashboard.</p>
-        <div class="actions">
-          <a href="/login" class="btn btn-primary">Log In</a>
-          <a href="/signup" class="btn btn-secondary">Sign Up</a>
+  <body
+    class="m-0 min-h-screen font-[Segoe_UI,Tahoma,Geneva,Verdana,sans-serif] text-[#0f172a]
+  bg-[radial-gradient(circle_at_10%_15%,#ffffff_0%,transparent_36%),radial-gradient(circle_at_90%_80%,#dbeafe_0%,transparent_42%),linear-gradient(135deg,#f6f9ff,#eaf1ff)]">
+
+    <main class="min-h-screen grid place-items-center p-6 sm:p-4">
+
+      <section class="w-full max-w-[760px] px-10 py-11 sm:px-5 sm:py-8
+      rounded-[20px] sm:rounded-[14px]
+      border border-[#cfdaf4]
+      bg-[rgba(255,255,255,0.9)]
+      backdrop-blur-[4px]
+      shadow-[0_18px_40px_rgba(30,64,175,0.16)]
+      text-center">
+
+        <!-- Eyebrow -->
+        <h1 class="inline-block mb-3.5 px-3 py-1.5
+        text-[12px] font-bold uppercase tracking-[0.8px]
+        text-[#1d4ed8] bg-[#dbeafe]
+        rounded-full">
+          Feedback Workspace
+        </h1>
+
+        <!-- Main Heading -->
+        <h2 class="m-0 text-[clamp(30px,5vw,44px)] leading-[1.12] font-bold">
+          Build Better Experiences With Meaningful Feedback
+        </h2>
+
+        <!-- Subtitle -->
+        <p class="mt-3.5 mx-auto max-w-[560px]
+        text-[17px] sm:text-[15px]
+        text-[#475569] leading-[1.6]">
+          Collect, review, and act on user feedback in one clean dashboard.
+        </p>
+
+        <!-- Actions -->
+        <div class="mt-7 flex justify-center gap-3 flex-wrap">
+
+          <!-- Primary Button -->
+          <a href="/login" class="min-w-[140px] px-4 py-3
+          rounded-[10px] font-bold text-white
+          bg-[#1d4ed8]
+          transition-all duration-200
+          hover:bg-[#1e40af] hover:-translate-y-[2px]
+          hover:shadow-[0_10px_20px_rgba(37,99,235,0.24)]
+          active:translate-y-0">
+            Log In
+          </a>
+
+          <!-- Secondary Button -->
+          <a href="/signup" class="min-w-[140px] px-4 py-3
+          rounded-[10px] font-bold
+          text-[#1e40af] bg-white
+          border border-[#bfd1ff]
+          transition-all duration-200
+          hover:bg-[#f8fbff] hover:-translate-y-[2px]
+          active:translate-y-0
+          w-full sm:w-auto">
+            Sign Up
+          </a>
+
         </div>
       </section>
     </main>

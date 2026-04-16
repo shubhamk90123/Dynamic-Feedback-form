@@ -4,32 +4,32 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feedback</title>
-    <link rel="stylesheet" href="/css/usercss/userFeedback.css">
+    <title>Add Feedback</title>
+    <link rel="stylesheet" href="/output.css">
   </head>
 
-  <body>
-  <form class="feedback-card" action="/addFeedback" method="POST">
+  <body class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 font-sans text-slate-800 flex items-center justify-center p-4">
+  <form class="w-full max-w-md bg-white/80 backdrop-blur-md border border-slate-200 rounded-xl shadow-lg p-8" action="/addFeedback" method="POST">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-    <h1>Feedback</h1>
+    <h1 class="text-2xl font-bold tracking-tight text-center mb-6">Add New Feedback</h1>
   
     <% if (errors && errors.length) { %>
-      <div class="error-box">
+      <div class="mb-5 p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm text-center">
         <% errors.forEach(function(err) { %>
-          <p>
-            <%= err %>
-          </p>
-          <% }) %>
+          <p class="m-0"><%= err %></p>
+        <% }) %>
       </div>
-      <% } %>
+    <% } %>
   
-        <label for="feedbackText">Enter Your Feedback</label>
-        <textarea id="feedbackText" name="feedback" placeholder="Write your feedback here..." required><%= oldInput?.feedback || '' %></textarea>
+    <label class="block text-sm font-semibold mb-2 text-slate-700" for="feedbackText">Enter Your Feedback</label>
+    <textarea class="w-full min-h-[140px] px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white/50 resize-y placeholder:text-slate-400 mb-4" id="feedbackText" name="feedback" placeholder="Write your feedback here..." required><%= oldInput?.feedback || '' %></textarea>
   
-        <button type="submit" class="btn btn-submit">Submit</button>
-        <a href="/dashboard" class="link">Back to Dashboard</a>
+    <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition active:scale-[0.98]">Submit Feedback</button>
+    
+    <div class="mt-4 text-center">
+      <a href="/dashboard" class="text-sm font-medium text-slate-500 hover:text-slate-800 transition underline-offset-4 hover:underline">Back to Dashboard</a>
+    </div>
   </form>
 
   </body>
-
 </html>
