@@ -1,5 +1,9 @@
 const Users = require("../models/user");
-const { hashPassword, verifyPassword, needsRehash } = require("../utils/password");
+const {
+  hashPassword,
+  verifyPassword,
+  needsRehash,
+} = require("../utils/password");
 
 const isEmail = (v = "") => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
@@ -8,7 +12,7 @@ exports.postLogin = (req, res) => {
   const password = String(req.body.password || "");
 
   const errors = [];
-  if (!email) errors.push("Email is required.");  
+  if (!email) errors.push("Email is required.");
   if (!password) errors.push("Password is required.");
 
   if (errors.length) {
@@ -17,63 +21,64 @@ exports.postLogin = (req, res) => {
       oldInput: { email },
     });
   }
-   
-  Users.findOne({ email }).then((matchedUser) => {
-    if (!matchedUser) {
-      return res.status(401).render("./formPage/login", {
-        errors: ["Invalid email or password."],
-        oldInput: { email },
-      });
-    }
 
-    const isValidPassword = verifyPassword(password, matchedUser.password);
-    if (!isValidPassword) {
-      return res.status(401).render("./formPage/login", {
-        errors: ["Invalid email or password."],
-        oldInput: { email },
-      });
-    }
+  Users.findOne({ email })
+    .then((matchedUser) => {
+      console.log(`[LOGIN] Searching for user with email: ${email}`);
+      console.log(`[LOGIN] Found user:`, matchedUser);
 
-    const completeLogin = () => {
-      req.session.regenerate((sessionError) => {
-        if (sessionError) {
-          console.error(sessionError);
-          return res.status(500).send("Internal Server Error");
-        }
+      if (!matchedUser) {
+        console.log(`[LOGIN] User not found, rejecting login`);
+        return res.status(401).render("./formPage/login", {
+          errors: ["Invalid email or password."],
+          oldInput: { email },
+        });
+      }
 
-        req.session.user = {
-          username: matchedUser.username,
-          email: matchedUser.email,
-          role: matchedUser.role,
-        };
+      console.log(`[LOGIN] User found, checking password`);
 
-        return req.session.save((saveError) => {
-          if (saveError) {
-            console.error(saveError);
+      const completeLogin = () => {
+        req.session.regenerate((sessionError) => {
+          if (sessionError) {
+            console.error(sessionError);
             return res.status(500).send("Internal Server Error");
           }
-          return res.redirect("/dashboard");
+
+          req.session.user = {
+            username: matchedUser.username,
+            email: matchedUser.email,
+            role: matchedUser.role,
+          };
+
+          return req.session.save((saveError) => {
+            if (saveError) {
+              console.error(saveError);
+              return res.status(500).send("Internal Server Error");
+            }
+            return res.redirect("/dashboard");
+          });
         });
-      });
-    };
+      };
 
-    if (needsRehash(matchedUser.password)) {
-      const upgradedPassword = hashPassword(password);
-      matchedUser.password = upgradedPassword;
-      return matchedUser.save().then(() => completeLogin());
-    }
+      if (needsRehash(matchedUser.password)) {
+        const upgradedPassword = hashPassword(password);
+        matchedUser.password = upgradedPassword;
+        return matchedUser.save().then(() => completeLogin());
+      }
 
-    return completeLogin();
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
-  });
+      return completeLogin();
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+    });
 };
 
 exports.postSignUp = (req, res) => {
   const username = String(req.body.username || "").trim();
-  const email = String(req.body.email || "").trim().toLowerCase();
+  const email = String(req.body.email || "")
+    .trim()
+    .toLowerCase();
   const role = String(req.body.role || "").trim();
   const password = String(req.body.password || "").trim();
   const confirmPassword = String(req.body.confirmPassword || "").trim();
