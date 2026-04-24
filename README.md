@@ -4,7 +4,11 @@ A robust, full-stack web application that allows users to provide and manage fee
 
 ## Live Demo
 🚀 The application is currently hosted on Render. You can view the live app here:
+<<<<<<< HEAD
 **[dynamic-feedback-form-production.up.railway.app]**
+=======
+**[(https://dynamic-feedback-form-production.up.railway.app/)]**
+>>>>>>> e8a1efb9fe4affc985950235e7531e3f5bf925b7
 
 ## Key Features
 - **User Authentication:** Secure signup and login workflows with password hashing, verification, and robust session management.
