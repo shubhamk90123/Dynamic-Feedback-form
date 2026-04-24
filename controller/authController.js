@@ -74,12 +74,14 @@ exports.postLogin = (req, res) => {
 exports.postSignUp = (req, res) => {
   const username = String(req.body.username || "").trim();
   const email = String(req.body.email || "").trim().toLowerCase();
+  const role = String(req.body.role || "").trim();
   const password = String(req.body.password || "").trim();
   const confirmPassword = String(req.body.confirmPassword || "").trim();
 
   const errors = [];
   if (!username) errors.push("Username is required.");
   if (!isEmail(email)) errors.push("Enter a valid email.");
+  if (!["admin", "user"].includes(role)) errors.push("Choose a valid role.");
   if (password.length < 6)
     errors.push("Password must be at least 6 characters.");
   if (password !== confirmPassword) errors.push("Passwords do not match.");
@@ -87,7 +89,7 @@ exports.postSignUp = (req, res) => {
   if (errors.length) {
     return res.status(400).render("./formPage/signUp", {
       errors,
-      oldInput: { username, email },
+      oldInput: { username, email, role },
     });
   }
 
@@ -96,7 +98,7 @@ exports.postSignUp = (req, res) => {
       if (existingUser) {
         return res.status(409).render("./formPage/signUp", {
           errors: ["Email is already registered."],
-          oldInput: { username, email },
+          oldInput: { username, email, role },
         });
       }
 
@@ -104,7 +106,7 @@ exports.postSignUp = (req, res) => {
       const newUser = new Users({
         username,
         email,
-        role: "user",
+        role,
         password: passwordHash,
       });
 

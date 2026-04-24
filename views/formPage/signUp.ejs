@@ -26,6 +26,12 @@
     
     <input type="email" placeholder="Email" name="email" value="<%= oldInput?.email || '' %>" required
       class="w-full mb-4 px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white/50">
+
+    <select name="role" required class="w-full mb-4 px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white/50 text-slate-600">
+      <option value="" disabled <%= !oldInput?.role ? "selected" : "" %>>Select Role</option>
+      <option value="user" <%= oldInput?.role === "user" ? "selected" : "" %>>User</option>
+      <option value="admin" <%= oldInput?.role === "admin" ? "selected" : "" %>>Admin</option>
+    </select>
     
     <div class="relative mb-4">
       <input id="signUpPassword" type="password" placeholder="Password" name="password" required
