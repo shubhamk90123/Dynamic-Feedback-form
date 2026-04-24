@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const isProduction = process.env.NODE_ENV === "production";
 const sessionSecret = process.env.SESSION_SECRET;
-const mongoUri = process.env.MONGO_URI;
+const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
 
 if (!sessionSecret && isProduction) {
   throw new Error("SESSION_SECRET is required in production.");
@@ -16,7 +16,9 @@ if (!sessionSecret && !isProduction) {
 }
 
 if (!mongoUri && isProduction) {
-  throw new Error("MONGO_URI is required in production for session storage.");
+  throw new Error(
+    "MONGO_URI is required in production for session storage.",
+  );
 }
 
 module.exports = session({

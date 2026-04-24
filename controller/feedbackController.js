@@ -14,22 +14,16 @@ exports.getUserDashboard = (req, res) => {
     : "User Feedback Dashboard";
   const loggedInText = `${loggedInUser.username} logged in (${loggedInUser.role})`;
 
-  Feedback.find()
-    .then((feedbackData) => {
-      const visibleFeedback = isAdmin
-        ? feedbackData
-        : feedbackData.filter(
-            (item) =>
-              item.submittedBy && item.submittedBy.email === loggedInUser.email,
-          );
+  const visibilityFilter = isAdmin
+    ? {}
+    : { "submittedBy.email": loggedInUser.email };
 
-      const feedbackWithPermission = visibleFeedback.map((item) => {
-        const itemObj = item.toObject
-          ? item.toObject({ virtuals: true })
-          : item;
+  Feedback.find(visibilityFilter).sort({ createdAt: -1 }).lean()
+    .then((feedbackData) => {
+      const feedbackWithPermission = feedbackData.map((item) => {
         return {
-          ...itemObj,
-          canManage: canManageFeedback(loggedInUser, itemObj),
+          ...item,
+          canManage: canManageFeedback(loggedInUser, item),
         };
       });
 

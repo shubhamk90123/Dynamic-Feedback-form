@@ -113,6 +113,12 @@ exports.postSignUp = (req, res) => {
       return newUser.save().then(() => res.redirect("/login"));
     })
     .catch((err) => {
+      if (err && err.code === 11000) {
+        return res.status(409).render("./formPage/signUp", {
+          errors: ["Email is already registered."],
+          oldInput: { username, email, role },
+        });
+      }
       console.error(err);
       res.status(500).send("Internal Server Error");
     });
