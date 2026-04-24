@@ -8,6 +8,19 @@
       <%= dashboardTitle %>
     </title>
     <link rel="stylesheet" href="/output.css">
+    <style>
+      @media (max-width: 820px) {
+        .dashboard-header {
+          align-items: stretch;
+        }
+        .hide-mobile {
+          display: none;
+        }
+        .feedback-cell {
+          max-width: 220px;
+        }
+      }
+    </style>
   </head>
 
   <body class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 font-sans text-slate-800">
@@ -15,7 +28,7 @@
     <main class="max-w-5xl mx-auto px-4 py-10">
 
       <!-- Header -->
-      <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+      <div class="dashboard-header flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
         <div>
           <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">
             <%= dashboardTitle %>
@@ -55,8 +68,8 @@
               <tr>
                 <th class="px-4 py-3 text-left">#</th>
                 <th class="px-4 py-3 text-left">Feedback</th>
-                <th class="px-4 py-3 text-left">User</th>
-                <th class="px-4 py-3 text-left">Date</th>
+                <th class="px-4 py-3 text-left hide-mobile">User</th>
+                <th class="px-4 py-3 text-left hide-mobile">Date</th>
                 <th class="px-4 py-3 text-left">Actions</th>
               </tr>
             </thead>
@@ -74,14 +87,14 @@
                     </td>
 
                     <!-- Feedback -->
-                    <td class="px-4 py-3 max-w-[400px]">
+                    <td class="px-4 py-3 max-w-[400px] feedback-cell">
                       <p class="line-clamp-2">
                         <%= item.feedback %>
                       </p>
                     </td>
 
                     <!-- User -->
-                    <td class="px-4 py-3">
+                    <td class="px-4 py-3 hide-mobile">
                       <div class="font-medium">
                         <%= item.submittedBy?.username || "Unknown" %>
                       </div>
@@ -91,7 +104,7 @@
                     </td>
 
                     <!-- Date -->
-                    <td class="px-4 py-3 text-slate-500">
+                    <td class="px-4 py-3 text-slate-500 hide-mobile">
                       <%= item.createdAt ? new Date(item.createdAt).toLocaleDateString() : new
                         Date().toLocaleDateString() %>
                     </td>

@@ -8,7 +8,7 @@
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 font-sans text-slate-800 flex items-center justify-center p-4">
 
-  <form action="/signup" method="POST" class="w-full max-w-sm bg-white/80 backdrop-blur-md border border-slate-200 rounded-xl shadow-lg p-8">
+  <form action="/signup" method="POST" class="w-full max-w-sm bg-white/80 backdrop-blur-md border border-slate-200 rounded-xl shadow-lg p-5 sm:p-8">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     
     <h1 class="text-2xl font-bold tracking-tight text-center mb-6">Register</h1>
@@ -26,12 +26,6 @@
     
     <input type="email" placeholder="Email" name="email" value="<%= oldInput?.email || '' %>" required
       class="w-full mb-4 px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white/50">
-    
-    <select name="role" required class="w-full mb-4 px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white/50 text-slate-600">
-      <option value="Select role" selected disabled>Select Role</option>
-      <option value="user">User</option>
-      <option value="admin">Admin</option>
-    </select>
     
     <div class="relative mb-4">
       <input id="signUpPassword" type="password" placeholder="Password" name="password" required
